@@ -213,13 +213,14 @@ const CreateInvoice = ({ setOpenCreateInvoice, type, invoice, onClose, isEditMod
     }));
 
     try {
-      // if (type === 'edit') {
-      //   await axios.post(`http://localhost:5000/api/invoices/${invoice.invoiceId}`, { formattedItems });
-      //   console.log('Invoice edited successfully');
-      // } else {
-        const response = await axios.post('http://localhost:5000/api/invoices', { formattedItems });
+      const backendUrl = process.env.REACT_APP_BACKEND_URL;
+      if (type === 'edit') {
+        await axios.post(`${backendUrl}/api/invoices/${invoice.invoiceId}`, { formattedItems });
+        console.log('Invoice edited successfully');
+      } else {
+        const response = await axios.post(`${backendUrl}/api/invoices`, { formattedItems });
         console.log('Invoice added successfully:', response.data);
-      // }
+      }
       onClose();
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -237,7 +238,19 @@ const editInvoice = async (invoiceId, formattedItems) => {
   await axios.put(`http://localhost:5000/api/invoices/${invoiceId}`, { formattedItems });
   console.log('Invoice edited successfully');
 };
-
+// Helper function to format items
+const formatItems = (items) => {
+  return items.map((item) => ({
+      itemName: item.itemName,
+      months: item.months,
+      Delay: item.Delay,
+      price: item.price,
+      total: item.total,
+      stampmoney: item.stampmoney,
+      TVA: item.TVA,
+      FinalP: item.FinalP,
+  }));
+};
 
   const onDelete = (id) => {
     setInvoiceData((prevData) => ({

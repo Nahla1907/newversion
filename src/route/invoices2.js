@@ -12,6 +12,7 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
+  backendUrl: process.env.REACT_APP_BACKEND_URL,
   waitForConnections: true,
   queueLimit: 0,
 });
@@ -42,10 +43,11 @@ router.post('/', async (req, res) => {
 
     for (const item of items) {
       await connection.query(
-        `INSERT INTO invoices (Invoicenumber, clientName, clientPhone, clientStreet, clientCity, clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom, selectDeliveryDateto, paymentTerms, description, total, stampmoney, TVA, FinalP, itemName, months, Delay, price)
-        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO invoices (Invoicenumber, clientName, clientPhone, clientStreet, clientCity, clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom, selectDeliveryDateto, paymentTerms, description, total, stampmoney, TVA, FinalP, itemName, months, Delay, price, new1, new2, new3)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [Invoicenumber, clientName, clientPhone, clientStreet, clientCity, clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom, selectDeliveryDateto, paymentTerms, description, item.total, item.stampmoney, item.TVA, item.FinalP, item.itemName, item.months, item.Delay, item.price, item.new1, item.new2, item.new3]
       );
+      
     }
 
     await connection.commit();
@@ -59,52 +61,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// New POST route for creating invoices in invoices19 table
-// router.post('/invoices19', async (req, res) => {
-//   const { formattedItems } = req.body;
 
-//   if (!formattedItems || !Array.isArray(formattedItems) || formattedItems.length === 0) {
-//     return res.status(400).json({ error: 'Invalid or missing formattedItems array' });
-//   }
-
-//   const invoice = formattedItems[0];
-//   const {
-//     Invoicenumber, clientName, clientPhone, clientStreet, clientCity,
-//     clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom,
-//     selectDeliveryDateto, paymentTerms, description, items, FinalP
-//   } = invoice;
-
-//   if (!items || !Array.isArray(items) || items.length === 0) {
-//     return res.status(400).json({ error: 'Invalid or missing items array' });
-//   }
-
-//   let connection;
-//   try {
-//     connection = await pool.getConnection();
-//     await connection.beginTransaction();
-
-//     for (const item of items) {
-//       await connection.query(
-//         `INSERT INTO invoices (Invoicenumber, clientName, clientPhone, clientStreet, clientCity, clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom, selectDeliveryDateto, paymentTerms, description, total, stampmoney, TVA, FinalP, itemName, months, Delay, price)
-//         VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-//         [Invoicenumber, clientName, clientPhone, clientStreet, clientCity, clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom, selectDeliveryDateto, paymentTerms, description, item.total, item.stampmoney, item.TVA, item.FinalP, item.itemName, item.months, item.Delay, item.price]
-//       );
-//     }
-
-//     await connection.commit();
-//     res.json({ success: true, message: 'Invoice and items saved successfully' });
-//   } catch (err) {
-//     if (connection) {
-//       await connection.rollback();
-//     }
-//     console.error('Error saving data:', err.message);
-//     res.status(500).send('Server Error');
-//   } finally {
-//     if (connection) {
-//       connection.release();
-//     }
-//   }
-// });
 
 // Route to get all invoices
 router.get('/', async (req, res) => {
@@ -187,13 +144,16 @@ router.delete('/:invoiceId', async (req, res) => {
 
 
 
-router.put('/:invoiceId', async (req, res) => {
+router.post('/:invoiceId', async (req, res) => {
   const { invoiceId } = req.params;
   const {
     Invoicenumber, clientName, clientPhone, clientStreet, clientCity,
     clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom,
     selectDeliveryDateto, paymentTerms, description, items, FinalP
   } = req.body;
+
+  console.log('Request body:', req.body);
+  console.log('Invoice ID:', invoiceId);
 
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Invalid or missing items array' });
@@ -204,19 +164,18 @@ router.put('/:invoiceId', async (req, res) => {
     connection = await pool.getConnection();
     await connection.beginTransaction();
 
-    // Update the invoice details in the 'invoices' table
     await connection.query(
       `UPDATE invoices SET Invoicenumber = ?, clientName = ?, clientPhone = ?, clientStreet = ?, clientCity = ?, clientstatus = ?, clientCountry = ?, selectDeliveryDate = ?, selectDeliveryDatefrom = ?, selectDeliveryDateto = ?, paymentTerms = ?, description = ?, FinalP = ? WHERE Id = ?`,
-      [Invoicenumber, clientName, clientPhone, clientStreet, clientCity, clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom, selectDeliveryDateto, paymentTerms, description, FinalP, invoiceId]
+      [ Invoicenumber, clientName, clientPhone, clientStreet, clientCity, clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom, selectDeliveryDateto, paymentTerms, description, FinalP, invoiceId]
     );
-
-    // Delete the existing items related to this invoice
-    await connection.query('DELETE FROM invoices WHERE invoiceId = ?', [invoiceId]);
-
-    // Insert the new items for the invoice
+    
+    // Delete existing items
+    await connection.query('DELETE FROM invoices_items WHERE invoiceId = ?', [invoiceId]);
+    
+    // Insert new items
     for (const item of items) {
       await connection.query(
-        `INSERT INTO invoices (invoiceId, itemName, months, Delay, price,new1,new2,new3) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO invoices_items (invoiceId, itemName, months, Delay, price, new1, new2, new3) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [invoiceId, item.itemName, item.months, item.Delay, item.price, item.new1, item.new2, item.new3]
       );
     }
@@ -233,8 +192,60 @@ router.put('/:invoiceId', async (req, res) => {
     if (connection) {
       connection.release();
     }
-  } 
+  }
 });
 
 
+
+
 export default router;
+
+
+
+
+// New POST route for creating invoices in invoices19 table
+// router.post('/invoices19', async (req, res) => {
+//   const { formattedItems } = req.body;
+
+//   if (!formattedItems || !Array.isArray(formattedItems) || formattedItems.length === 0) {
+//     return res.status(400).json({ error: 'Invalid or missing formattedItems array' });
+//   }
+
+//   const invoice = formattedItems[0];
+//   const {
+//     Invoicenumber, clientName, clientPhone, clientStreet, clientCity,
+//     clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom,
+//     selectDeliveryDateto, paymentTerms, description, items, FinalP
+//   } = invoice;
+
+//   if (!items || !Array.isArray(items) || items.length === 0) {
+//     return res.status(400).json({ error: 'Invalid or missing items array' });
+//   }
+
+//   let connection;
+//   try {
+//     connection = await pool.getConnection();
+//     await connection.beginTransaction();
+
+//     for (const item of items) {
+//       await connection.query(
+//         `INSERT INTO invoices (Invoicenumber, clientName, clientPhone, clientStreet, clientCity, clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom, selectDeliveryDateto, paymentTerms, description, total, stampmoney, TVA, FinalP, itemName, months, Delay, price)
+//         VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+//         [Invoicenumber, clientName, clientPhone, clientStreet, clientCity, clientstatus, clientCountry, selectDeliveryDate, selectDeliveryDatefrom, selectDeliveryDateto, paymentTerms, description, item.total, item.stampmoney, item.TVA, item.FinalP, item.itemName, item.months, item.Delay, item.price]
+//       );
+//     }
+
+//     await connection.commit();
+//     res.json({ success: true, message: 'Invoice and items saved successfully' });
+//   } catch (err) {
+//     if (connection) {
+//       await connection.rollback();
+//     }
+//     console.error('Error saving data:', err.message);
+//     res.status(500).send('Server Error');
+//   } finally {
+//     if (connection) {
+//       connection.release();
+//     }
+//   }
+// });

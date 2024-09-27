@@ -22,8 +22,9 @@ function InvoiceInfo() {
   const componentRef = useRef();
 
   const fetchInvoice = () => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     axios
-      .get(`http://localhost:5000/api/invoices/${invoiceId}`)
+      .get(`${backendUrl}/api/invoices/${invoiceId}`)
       .then((response) => {
         setInvoice(response.data);
       })
@@ -43,8 +44,9 @@ function InvoiceInfo() {
   }, [invoiceId]);
 
   const onDeleteButtonClick = async () => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     try {
-      await axios.delete(`http://localhost:5000/api/invoices/${invoiceId}`);
+      await axios.delete(`${backendUrl}/api/invoices/${invoiceId}`);
       navigate('/center'); // Navigate back to the correct route after deletion
     } catch (error) {
       console.error("Error deleting the invoice:", error);
@@ -179,23 +181,7 @@ function InvoiceInfo() {
 
           {/* Render CreateInvoice component when isEditOpen is true */}
           {isEditOpen && (
-            // <CreateInvoice
-            //   isEditMode={true}
-            //   invoiceData={invoice} // Pass the current invoice data for editing
-            //   onClose={() => setIsEditOpen(false)} // Close the modal
-            //   onSave={(updatedInvoice) => {
-            //     // Handle saving the updated invoice here
-            //     // For example, you might want to send a PUT request to update the invoice
-            //     axios.put(`http://localhost:5000/api/invoices/${invoiceId}`, updatedInvoice)
-            //       .then((response) => {
-            //         setInvoice(response.data);
-            //         setIsEditOpen(false); // Close the edit modal
-            //       })
-            //       .catch((error) => {
-            //         console.error('Error updating invoice:', error);
-            //       });
-            //   }}
-            // />
+         
             <CreateInvoice
                 type="edit" // Pass type as "edit"
                 invoice={invoice} // Pass the current invoice data for editing

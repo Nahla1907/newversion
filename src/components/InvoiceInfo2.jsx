@@ -22,8 +22,9 @@ function InvoiceInfo2() {
   const componentRef = useRef();
 
   const fetchInvoice = () => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     axios
-      .get(`http://localhost:5000/api/invoices19/${Id}`)
+      .get(`${backendUrl}/api/invoices19/${Id}`)
       .then((response) => {
         setInvoice(response.data);
       })
@@ -31,6 +32,7 @@ function InvoiceInfo2() {
         console.error('Error fetching invoice:', error);
       });
   };
+
 
   const handleEditClick = () => {
     setIsEditOpen(true); // Open the edit modal
@@ -43,9 +45,10 @@ function InvoiceInfo2() {
   }, [Id]);
 
   const onDeleteButtonClick = async () => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     try {
-      await axios.delete(`http://localhost:5000/api/invoices19/${Id}`);
-      navigate('/center2'); // Navigate back to the correct route after deletion
+      await axios.delete(`${backendUrl}/api/invoices19/${Id}`);
+      navigate('/center'); // Navigate back to the correct route after deletion
     } catch (error) {
       console.error("Error deleting the invoice:", error);
     }
