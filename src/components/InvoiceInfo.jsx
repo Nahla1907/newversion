@@ -22,9 +22,9 @@ function InvoiceInfo() {
   const componentRef = useRef();
 
   const fetchInvoice = () => {
-    const backendUrl = process.env.REACT_APP_BACKEND_URL;
+   
     axios
-      .get(`${backendUrl}/api/invoices/${invoiceId}`)
+      .get(`http://localhost:5000/api/invoices/${invoiceId}`)
       .then((response) => {
         setInvoice(response.data);
       })
@@ -44,9 +44,9 @@ function InvoiceInfo() {
   }, [invoiceId]);
 
   const onDeleteButtonClick = async () => {
-    const backendUrl = process.env.REACT_APP_BACKEND_URL;
+    
     try {
-      await axios.delete(`${backendUrl}/api/invoices/${invoiceId}`);
+      await axios.delete(`http://localhost:5000/api/invoices/${invoiceId}`);
       navigate('/center'); // Navigate back to the correct route after deletion
     } catch (error) {
       console.error("Error deleting the invoice:", error);

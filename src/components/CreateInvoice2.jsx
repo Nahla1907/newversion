@@ -125,12 +125,12 @@ const CreateInvoice = ({ setOpenCreateInvoice, type, invoice, onClose, isEditMod
     }));
 
     try {
-      const backendUrl = process.env.REACT_APP_BACKEND_URL;
+      
       if (type === 'edit') {
-        await axios.put(`${backendUrl}/api/invoices19/${invoice.id}`, { formattedItems });
+        await axios.put(`http://localhost:5000/api/invoices19/${invoice.id}`, { formattedItems });
         console.log('Invoice edited successfully');
       } else {
-        const response = await axios.post(`${backendUrl}/api/invoices19`, { formattedItems });
+        const response = await axios.post(`http://localhost:5000/api/invoices19`, { formattedItems });
         console.log('Invoice added successfully:', response.data);
       }
       onClose();
