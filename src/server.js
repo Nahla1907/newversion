@@ -62,7 +62,7 @@ app.use(cors({
 app.use(express.json());
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'build'))); // Adjust the path as needed
+app.use(express.static(path.join(__dirname, 'dist'))); // Adjust the path as needed
 
 // Routes
 app.use('/api/invoices', invoiceRoutes); // Mount invoices routes
@@ -75,7 +75,7 @@ app.get('/', (req, res) => {
 
 // Catch-all handler to serve React's index.html for any non-API routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html')); // Adjust the path as needed
+  res.sendFile(path.join(__dirname, 'dist', 'index.html')); // Adjust the path as needed
 });
 
 // Error Handling Middleware
