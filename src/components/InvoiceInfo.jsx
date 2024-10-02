@@ -24,7 +24,7 @@ function InvoiceInfo() {
   const fetchInvoice = () => {
    
     axios
-      .get(`http://localhost:5000/api/invoices/${invoiceId}`)
+      .get(`https://wonderful-amazement-production.up.railway.app/api/invoices/${invoiceId}`)
       .then((response) => {
         setInvoice(response.data);
       })
@@ -46,7 +46,7 @@ function InvoiceInfo() {
   const onDeleteButtonClick = async () => {
     
     try {
-      await axios.delete(`http://localhost:5000/api/invoices/${invoiceId}`);
+      await axios.delete(`https://wonderful-amazement-production.up.railway.app/invoices/${invoiceId}`);
       navigate('/center'); // Navigate back to the correct route after deletion
     } catch (error) {
       console.error("Error deleting the invoice:", error);
