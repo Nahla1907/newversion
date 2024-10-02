@@ -93,7 +93,7 @@ export const createInvoice = createAsyncThunk(
   'invoices/createInvoice',
   async (invoiceData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/invoices', invoiceData);
+      const response = await axios.post('https://wonderful-amazement-production.up.railway.app/api/invoices', invoiceData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -106,7 +106,7 @@ export const fetchInvoices = createAsyncThunk(
   'invoices/fetchInvoices',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/invoices');
+      const response = await axios.get('https://wonderful-amazement-production.up.railway.app/api/invoices');
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -119,7 +119,7 @@ export const deleteInvoiceAsync = createAsyncThunk(
   'invoices/deleteInvoice',
   async (invoiceId, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:5000/api/invoices/${invoiceId}`);
+      await axios.delete(`https://wonderful-amazement-production.up.railway.app/api/invoices/${invoiceId}`);
       return invoiceId; // Return the ID of the deleted invoice
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -132,7 +132,7 @@ export const createInvoice19 = createAsyncThunk(
   'invoices19/createInvoice19',
   async (invoiceData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/invoices19', invoiceData);
+      const response = await axios.post('https://wonderful-amazement-production.up.railway.app/api/invoices19', invoiceData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -145,7 +145,7 @@ export const fetchInvoices19 = createAsyncThunk(
   'invoices/fetchInvoices19',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/invoices19');
+      const response = await axios.get('https://wonderful-amazement-production.up.railway.app/api/invoices19');
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -158,7 +158,7 @@ export const deleteInvoice19Async = createAsyncThunk(
   'invoices19/deleteInvoice19',
   async (Id, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:5000/api/invoices19/${Id}`);
+      await axios.delete(`https://wonderful-amazement-production.up.railway.app/api/invoices19/${Id}`);
       return Id; // Return the ID of the deleted invoice
     } catch (err) {
       return rejectWithValue(err.response.data);
