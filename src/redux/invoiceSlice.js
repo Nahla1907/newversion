@@ -313,7 +313,7 @@ export const deleteInvoiceAsync = createAsyncThunk(
   'invoices/deleteInvoice',
   async (invoiceId, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:5000/api/invoices/${invoiceId}`);
+      await axios.delete(`https://wonderful-amazement-production.up.railway.app/api/invoices/${invoiceId}`);
       return invoiceId;
     } catch (err) {
       return rejectWithValue('Error deleting invoice');
@@ -326,7 +326,7 @@ export const fetchFilteredInvoices = createAsyncThunk(
   async ({ name, clientstatus }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/invoices/filter?name=${name}&clientstatus=${clientstatus}`
+        `https://wonderful-amazement-production.up.railway.app/api/invoices/filter?name=${name}&clientstatus=${clientstatus}`
       );
       return response.data;
     } catch (error) {
@@ -339,7 +339,7 @@ export const createInvoice = createAsyncThunk(
   'invoices/createInvoice',
   async (formattedItems, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/invoices', { formattedItems });
+      const response = await axios.post('https://wonderful-amazement-production.up.railway.app/api/invoices', { formattedItems });
       return response.data;
     } catch (error) {
       return rejectWithValue('Error creating invoice');
@@ -351,7 +351,7 @@ export const fetchInvoices = createAsyncThunk(
   'invoices/fetchInvoices',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/invoices');
+      const response = await axios.get('https://wonderful-amazement-production.up.railway.app/api/invoices');
       return response.data;
     } catch (error) {
       return rejectWithValue('Error fetching invoices');
@@ -363,7 +363,7 @@ export const createInvoice19 = createAsyncThunk(
   'invoices/createInvoice19',
   async (formattedItems, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/invoices19', { formattedItems });
+      const response = await axios.post('https://wonderful-amazement-production.up.railway.app/api/invoices19', { formattedItems });
       return response.data;
     } catch (error) {
       return rejectWithValue('Error creating invoice in invoices19');
@@ -375,7 +375,7 @@ export const fetchInvoices19 = createAsyncThunk(
   'invoices/fetchInvoices19',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/invoices19');
+      const response = await axios.get('https://wonderful-amazement-production.up.railway.app/api/invoices19');
       return response.data;
     } catch (error) {
       return rejectWithValue('Error fetching invoices from invoices19');
@@ -388,7 +388,7 @@ export const editInvoiceAsync = createAsyncThunk(
   async ({ invoiceId, updatedData }, { rejectWithValue }) => {
     try {
       console.log('InvoiceId:', invoiceId); // Log to check if invoiceId is passed
-      const response = await axios.put(`http://localhost:5000/api/invoices/${invoiceId}`, updatedData);
+      const response = await axios.put(`https://wonderful-amazement-production.up.railway.app/api/invoices/${invoiceId}`, updatedData);
       return response.data;
     } catch (error) {
       return rejectWithValue('Error updating invoice');
@@ -444,7 +444,7 @@ const invoiceSlice = createSlice({
       const { items, ...invoiceDetails } = action.payload;
       const { total, stampmoney, TVA, FinalP } = calculateTotals(items);
 
-      // Destructure `new1`, `new2`, and `new3` from `invoiceDetails`
+      // Handle new1, new2, new3 for `invoices`
       const { new1, new2, new3 } = invoiceDetails;
 
       const newInvoice = {
@@ -455,19 +455,42 @@ const invoiceSlice = createSlice({
         items,
         total,
         stampmoney,
+        TVA,
+        FinalP,
         new1,
         new2,
         new3,
-        TVA,
-        FinalP,
       };
       state.invoices.push(newInvoice);
+    },
+    addInvoice19: (state, action) => {
+      const { items, ...invoiceDetails } = action.payload;
+      const { total, stampmoney, TVA, FinalP } = calculateTotals(items);
+
+      // Handle add1, add2, add3 for `invoices19`
+      const { add1, add2, add3 } = invoiceDetails;
+
+      const newInvoice19 = {
+        ...invoiceDetails,
+        selectDeliveryDate: today,
+        paymentDue: getForwardDate(invoiceDetails.paymentTerms),
+        clientstatus: 'pending',
+        items,
+        total,
+        stampmoney,
+        TVA,
+        FinalP,
+        add1,
+        add2,
+        add3,
+      };
+      state.invoices19.push(newInvoice19);
     },
     editInvoice: (state, action) => {
       const { invoiceId, items, ...invoiceDetails } = action.payload;
       const { total, stampmoney, TVA, FinalP } = calculateTotals(items);
 
-      const invoiceIndex = state.invoices.findIndex((invoice) => invoice.Id === invoiceId); // Ensure the key matches your schema
+      const invoiceIndex = state.invoices.findIndex((invoice) => invoice.Id === invoiceId);
       if (invoiceIndex !== -1) {
         const { new1, new2, new3 } = invoiceDetails;
 
@@ -483,6 +506,31 @@ const invoiceSlice = createSlice({
           new1,
           new2,
           new3,
+          TVA,
+          FinalP,
+        };
+      }
+    },
+    editInvoice19: (state, action) => {
+      const { invoiceId, items, ...invoiceDetails } = action.payload;
+      const { total, stampmoney, TVA, FinalP } = calculateTotals(items);
+
+      const invoiceIndex = state.invoices19.findIndex((invoice) => invoice.Id === invoiceId);
+      if (invoiceIndex !== -1) {
+        const { add1, add2, add3 } = invoiceDetails;
+
+        state.invoices19[invoiceIndex] = {
+          ...state.invoices19[invoiceIndex],
+          ...invoiceDetails,
+          selectDeliveryDate: today,
+          paymentDue: getForwardDate(invoiceDetails.paymentTerms),
+          clientstatus: 'pending',
+          items,
+          total,
+          stampmoney,
+          add1,
+          add2,
+          add3,
           TVA,
           FinalP,
         };
@@ -529,63 +577,37 @@ const invoiceSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(deleteInvoiceAsync.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(deleteInvoiceAsync.fulfilled, (state, action) => {
-        state.loading = false;
-        state.invoices = state.invoices.filter((invoice) => invoice.Id !== action.payload); // Ensure the key matches your schema
-        state.filteredInvoice = state.invoices;
+        state.invoices = state.invoices.filter((invoice) => invoice.Id !== action.payload);
+        state.invoices19 = state.invoices19.filter((invoice) => invoice.Id !== action.payload);
       })
-      .addCase(deleteInvoiceAsync.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(createInvoice.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+      .addCase(fetchFilteredInvoices.fulfilled, (state, action) => {
+        state.filteredInvoice = action.payload;
       })
       .addCase(createInvoice.fulfilled, (state, action) => {
-        state.loading = false;
         state.invoices.push(action.payload);
-        state.filteredInvoice = state.invoices;
-      })
-      .addCase(createInvoice.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(createInvoice19.pending, (state) => {
-        state.loading = true;
-        state.error = null;
       })
       .addCase(createInvoice19.fulfilled, (state, action) => {
-        state.loading = false;
         state.invoices19.push(action.payload);
-        state.filteredInvoice = state.invoices19;
-      })
-      .addCase(createInvoice19.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(editInvoiceAsync.pending, (state) => {
-        state.loading = true;
-        state.error = null;
       })
       .addCase(editInvoiceAsync.fulfilled, (state, action) => {
-        state.loading = false;
-        const index = state.invoices.findIndex((invoice) => invoice.Id === action.payload.Id); // Ensure the key matches your schema
+        const index = state.invoices.findIndex((invoice) => invoice.Id === action.payload.Id);
         if (index !== -1) {
           state.invoices[index] = action.payload;
         }
-      })
-      .addCase(editInvoiceAsync.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
       });
   },
 });
 
-export const { setSelectedInvoice, filterInvoice, saveInvoice, updateInvoiceStatus, addInvoice, editInvoice } = invoiceSlice.actions;
+export const {
+  setSelectedInvoice,
+  filterInvoice,
+  saveInvoice,
+  updateInvoiceStatus,
+  addInvoice,
+  addInvoice19,
+  editInvoice,
+  editInvoice19,
+} = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;
