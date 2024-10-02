@@ -54,12 +54,15 @@ const app = express();
 
 // Middleware
 app.use(cors({
- //'http://localhost:5173',   // For development (local frontend)
-    'newversion-vdkv.vercel.app', // Main production URL
+  origin: [
+    //'http://localhost:5173', // For development (local frontend)
+    'https://newversion-vdkv.vercel.app', // Main production URL
     /https:\/\/newversion.*\.vercel\.app$/ // Regex to allow any Vercel-generated subdomains for this project
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow these methods
   allowedHeaders: ['Content-Type', 'Authorization'] // Allow these headers
 }));
+
 
 app.use(express.json());
 
