@@ -127,10 +127,10 @@ const CreateInvoice = ({ setOpenCreateInvoice, type, invoice, onClose, isEditMod
     try {
       
       if (type === 'edit') {
-        await axios.put(`http://localhost:5000/api/invoices19/${invoice.id}`, { formattedItems });
+        await axios.put(`https://wonderful-amazement-production.up.railway.app/invoices19/${invoice.id}`, { formattedItems });
         console.log('Invoice edited successfully');
       } else {
-        const response = await axios.post(`http://localhost:5000/api/invoices19`, { formattedItems });
+        const response = await axios.post(`https://wonderful-amazement-production.up.railway.app/api/invoices19`, { formattedItems });
         console.log('Invoice added successfully:', response.data);
       }
       onClose();
