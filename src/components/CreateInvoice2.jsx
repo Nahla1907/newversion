@@ -382,13 +382,13 @@ const CreateInvoice = ({ setOpenCreateInvoice, type, invoice, onClose, isEditMod
       />
      </div>
 
-     <div className='flex flex-col ml-auto-2 col-span-2'>
-      <label className='text-Black-400 font-light text-right'> :   (3) المبلغ المسدد  </label>
+    <div className='flex flex-col ml-auto-2 col-span-2'>
+      <label className='text-Black-400 font-light text-right'> :  المبلغ المسدد3  </label>
       <input
         type='text'
-        id='paymentTerms19'
+        id='PaymentTerms19'
         value={invoiceData.paymentTerms19}
-        onChange={(e) => setInvoiceData((prev) => ({ ...prev, paymentTerms19aymentTerms19: e.target.value }))}
+        onChange={(e) => setInvoiceData((prev) => ({ ...prev, paymentTerms19: e.target.value }))}
         className={`text-right dark:bg-[#FAEBCD] py-2 px-4 text-black border-[.2px] w-full max-w-[600px] focus:outline-none rounded-lg focus:outline-yellow-400 border-gray-300 ${
           isValidatorActive && !validateClientCity(invoiceData.paymentTerms19) && 'border-red-500 dark:border-red-500 outline-red-500 border-2'
         } dark:border-gray-800 ml-auto`}
