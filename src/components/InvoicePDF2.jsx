@@ -318,7 +318,7 @@ const InvoicePDF = ({ invoice }) => (
         </View>
         <View style={styles.summaryRow}>
           <View style={styles.summaryCol}><Text style={styles.summaryText}>{invoice.TVA19}</Text></View>
-          <View style={styles.summaryTotalCol}><Text style={styles.summaryText}>الرسوم على القيمة المضافة %09</Text></View>
+          <View style={styles.summaryTotalCol}><Text style={styles.summaryText}>الرسوم على القيمة المضافة %19</Text></View>
         </View>
         <View style={styles.summaryRow}>
           <View style={styles.summaryCol}><Text style={styles.summaryText}>{invoice.FinalP19}</Text></View>
