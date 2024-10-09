@@ -153,12 +153,12 @@ function InvoiceInfo2() {
                 <div className="grid grid-cols-4 gap-6">
                   <p className="text-gray-500 dark:text-gray-200 font-thin">المساحة</p>
                   <p className="text-gray-500 dark:text-gray-200 font-thin">السعر الوحدوي</p>      
-                  <p className="text-gray-500 dark:text-gray-200 font-thin">القيمة المضافة %09</p>
+                  <p className="text-gray-500 dark:text-gray-200 font-thin">القيمة المضافة %19</p>
                   <p className="text-gray-500 dark:text-gray-200 font-thin">المجموع خارج الرسوم</p>
                  
                   <p className="dark:text-white">{invoice.months19}</p>
                   <p className="dark:text-white">{invoice.price19}</p>
-                  <p className="dark:text-white">{invoice.TV19}</p>
+                  <p className="dark:text-white">{invoice.TVA19}</p>
                   <p className="dark:text-white">{invoice.total19}</p>
                   
                 </div>
