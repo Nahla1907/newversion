@@ -57,7 +57,8 @@ app.use(cors({
   origin: [
     //'http://localhost:5173', // For development (local frontend)
     'https://newversion-vdkv.vercel.app', // Main production URL
-    /https:\/\/newversion.*\.vercel\.app$/ // Regex to allow any Vercel-generated subdomains for this project
+    'https://newversion-vdkv-j0hzdiq90-nahlas-projects-cb383f91.vercel.app', // Specific subdomain you are using
+    /https:\/\/newversion.*\.vercel\.app$/ // Regex to allow other subdomains as needed
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow these methods
   allowedHeaders: ['Content-Type', 'Authorization'] // Allow these headers
