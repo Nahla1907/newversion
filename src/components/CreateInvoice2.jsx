@@ -383,7 +383,7 @@ const CreateInvoice = ({ setOpenCreateInvoice, type, invoice, onClose, isEditMod
      </div>
 
     <div className='flex flex-col ml-auto-2 col-span-2'>
-      <label className='text-Black-400 font-light text-right'> :  المبلغ المسدد3  </label>
+      <label className='text-Black-400 font-light text-right'> : (3) المبلغ المسدد  </label>
       <input
         type='text'
         id='PaymentTerms19'
