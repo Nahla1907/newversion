@@ -332,7 +332,7 @@ const CreateInvoice = ({ setOpenCreateInvoice, type, invoice, onClose, isEditMod
         onChange={(selectedOption) =>
           setInvoiceData((prev) => ({
             ...prev,
-            clientstatus: selectedOption.value,
+            clientstatus19: selectedOption.value,
           }))
         }
         className={`text-right dark:bg-[#FAEBCD] py-2 px-4 text-black border-[.2px] w-full max-w-[600px] focus:outline-none rounded-lg focus:outline-yellow-400 border-gray-300 dark:border-gray-800 ${
