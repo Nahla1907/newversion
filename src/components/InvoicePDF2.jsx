@@ -289,11 +289,11 @@ const InvoicePDF = ({ invoice }) => (
         <Text>الرقم الجبائي : 000633060209497</Text>
         <Text>رقم المادة الجبائية : 33010009021</Text>
         <Text>رقم الهاتف / الفاكس : 029404129</Text>
-        <Text> ..............: إليزي ف </Text>
+        
       </View>
       <Text style={styles.invoiceTitle}>فاتورة رقم :{invoice.Invoicenumber19}</Text>
       <View style={styles.institutionDetails}>
-        <Text>{invoice.clientName19}:السيد / ة</Text> 
+        <Text>:(ة)السيد {invoice.clientName}</Text> 
       </View>
 
       <View style={styles.table}>
@@ -366,7 +366,7 @@ const InvoicePDF = ({ invoice }) => (
          
       
       <View style={styles.signature}>
-        <Text>المدير</Text>
+        <Text>المديـــــــــــــر</Text>
       </View>
     </Page>
   </Document>
