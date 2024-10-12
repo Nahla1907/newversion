@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signature: {
-    fontSize: 14,
+    fontSize: 18,
     textAlign: 'right',
     marginTop: 20,
     marginRight: 50,
