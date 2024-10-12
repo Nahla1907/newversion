@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signature: {
-    fontSize: 14,
+    fontSize: 18,
     textAlign: 'right',
     marginTop: 20,
     marginRight: 50,
@@ -287,11 +287,11 @@ const InvoicePDF = ({ invoice }) => (
         <Text>الرقم الجبائي : 000633060209497</Text>
         <Text>رقم المادة الجبائية : 33010009021</Text>
         <Text>رقم الهاتف / الفاكس : 029404129</Text>
-        <Text> ..............: إليزي ف </Text>
+       
       </View>
       <Text style={styles.invoiceTitle}>فاتورة رقم :{invoice.Invoicenumber}</Text>
       <View style={styles.institutionDetails}>
-        <Text>{invoice.clientName}:السيد / ة</Text> 
+        <Text>:(ة)السيد {invoice.clientName}</Text> 
       </View>
 
       <View style={styles.table}>
@@ -364,7 +364,7 @@ const InvoicePDF = ({ invoice }) => (
          
       
       <View style={styles.signature}>
-        <Text>المدير</Text>
+        <Text>المديـــــــــــر</Text>
       </View>
     </Page>
   </Document>
